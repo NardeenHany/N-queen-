@@ -3,20 +3,16 @@
 package mysolution;
 import javafx.util.Pair;
 
-import java.util.Scanner;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.*;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
 
-/**
- * @author Arsany
- */
 public class MySolution  {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         int[][] board = {{0, 0, 0, 1, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 1, 0},
                 {0, 0, 1, 0, 0, 0, 0, 0},
@@ -25,29 +21,29 @@ public class MySolution  {
                 {0, 0, 0, 0, 1, 0, 0, 0},
                 {1, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 1, 0, 0}};
-        int row = 8;
-        int column = 8;
 
-        int CorrectQueens = 0;
 
 
         int coreCount = Runtime.getRuntime().availableProcessors();
         ExecutorService service = Executors.newFixedThreadPool(8);
-
+        CountDownLatch latch = new CountDownLatch(8);
         //get Queens locations
         Vector<Pair<Integer, Integer>>  queens = GetQueens(board);
         Queen queensThreads[] = new Queen[8];
         for (int i = 0; i < 8; i++) {
-            queensThreads[i] = new Queen(board,queens.get(i).getKey(),queens.get(i).getValue());
+            queensThreads[i] = new Queen(board,queens.get(i).getKey(),queens.get(i).getValue(),latch);
            service.execute(queensThreads[i]);
         }
 
+
+
+        latch.await();
+
         Checker check = new Checker(queensThreads);
-      service.execute(check);
+        
+        service.execute(check);
+
         service.shutdown();
-
-
-
 
     }
 

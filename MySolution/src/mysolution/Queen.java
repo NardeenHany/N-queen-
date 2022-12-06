@@ -1,18 +1,21 @@
 package mysolution;
 
+import java.util.concurrent.CountDownLatch;
+
 public class Queen implements Runnable {
     private Thread t;
     int [][] Board;
     int BoardSize = 8;
     int QueenRow, QueenCol;
-
+    private CountDownLatch countDownLatch;
     boolean isSafeQueen = false;
 
 
-    public Queen(int[][]board, int row, int col) {
+    public Queen(int[][]board, int row, int col ,CountDownLatch countDownLatch ) {
         Board = board;
         QueenRow = row;
         QueenCol = col;
+        this.countDownLatch = countDownLatch;
     }
 
     public int[][] getBoard() {
@@ -72,24 +75,11 @@ public class Queen implements Runnable {
                 return false;
 
         isSafeQueen = true;
+        countDownLatch.countDown();
         return true;
     }
 
-//    private  void traverse() {
-//        for (int i = 0; i < BoardSize; i++) {
-//            for (int k = 0; k < BoardSize; k++) {
-//                if (Board[i][k] == 1) {
-//                    if (isSafe(Board, i, k)) {
-//                    }
-//                }
-//            }
-//        }
-//        if (counter == 8) {
-//            System.out.println("True");
-//        } else {
-//            System.out.println("False");
-//        }
-//    }
+
     public void run() {
         System.out.println(isSafe() + " Row: "+QueenCol);
     }

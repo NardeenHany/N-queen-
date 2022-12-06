@@ -1,9 +1,13 @@
 package mysolution;
 
+import java.util.concurrent.CountDownLatch;
+
 public class Checker implements Runnable{
 
     Queen queensThreads[];
     int CorrectQueens = 0;
+
+
 
     public int getCorrectQueens() {
         return CorrectQueens;
