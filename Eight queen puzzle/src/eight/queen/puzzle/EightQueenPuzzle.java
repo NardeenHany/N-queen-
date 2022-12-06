@@ -12,7 +12,7 @@ public class EightQueenPuzzle {
     static final int N = 8;
 
    // print the final solution matrix 
-    static void printSolution(int board[][])
+    static void printSolution(int[][] board)
     {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++)
@@ -23,7 +23,7 @@ public class EightQueenPuzzle {
     }
 
     // function to check whether the position is safe or not 
-    static boolean isSafe(int board[][], int row, int col)
+    static boolean isSafe(int[][] board, int row, int col)
     {
         int i, j;
         for (i = 0; i < col; i++)
@@ -43,7 +43,7 @@ public class EightQueenPuzzle {
     }
 
     // The function that solves the problem using backtracking 
-    public static boolean solveNQueen(int board[][], int col)
+    public static boolean solveNQueen(int[][] board, int col)
     {
         if (col >= N)
             return true;
@@ -63,9 +63,9 @@ public class EightQueenPuzzle {
         return false;
     }
 
-    public static void main(String args[])
+    public static void main(String[] args)
     {
-        int board[][] = { { 0, 0, 0, 0, 0, 0, 0, 0 },
+        int[][] board = { { 0, 0, 0, 0, 0, 0, 0, 0 },
                           { 0, 0, 0, 0, 0, 0, 0, 0 },
                           { 0, 0, 0, 0, 0, 0, 0, 0 },
                           { 0, 0, 0, 0, 0, 0, 0, 0 }, 

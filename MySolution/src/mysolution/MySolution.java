@@ -1,104 +1,81 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
+
 
 package mysolution;
+import javafx.util.Pair;
+
 import java.util.Scanner;
+import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
-
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- *
  * @author Arsany
  */
-public class MySolution {
+public class MySolution  {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
-        int[][] first = { { 0, 0, 0, 1, 0, 0, 0, 0 },
-                          { 0, 0, 0, 0, 0, 0, 1, 0 },
-                          { 0, 0, 1, 0, 0, 0, 0, 0 },
-                          { 0, 0, 0, 0, 0, 0, 0, 1 }, 
-                          { 0, 1, 0, 0, 0, 0, 0, 0 },
-                          { 0, 0, 0, 0, 1, 0, 0, 0 },
-                          { 1, 0, 0, 0, 0, 0, 0, 0 },
-                          { 0, 0, 0, 0, 0, 1, 0, 0 }};
+        int[][] board = {{0, 0, 0, 1, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 1, 0},
+                {0, 0, 1, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 1},
+                {0, 1, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 1, 0, 0, 0},
+                {1, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 1, 0, 0}};
         int row = 8;
         int column = 8;
-       
 
-		// print both matrices
-		System.out.println("First Matrix:\n");
-		print2dArray(first);
-                traverse(first,row,column);
-                
-               
-	
-        
+        int CorrectQueens = 0;
+
+
+        int coreCount = Runtime.getRuntime().availableProcessors();
+        ExecutorService service = Executors.newFixedThreadPool(8);
+
+        //get Queens locations
+        Vector<Pair<Integer, Integer>>  queens = GetQueens(board);
+        Queen queensThreads[] = new Queen[8];
+        for (int i = 0; i < 8; i++) {
+            queensThreads[i] = new Queen(board,queens.get(i).getKey(),queens.get(i).getValue());
+           service.execute(queensThreads[i]);
+        }
+
+        Checker check = new Checker(queensThreads);
+      service.execute(check);
+        service.shutdown();
+//        ScheduledExecutorService ScheduledService = Executors.newScheduledThreadPool(coreCount);
+//        ScheduledService.schedule(check,2,SECONDS);
+
+
+
     }
-	private static void print2dArray(int[][] matrix) {
-        for (int i=0; i<8 ; i++) {
+
+    private static void print2dArray(int[][] matrix) {
+        for (int i = 0; i < 8; i++) {
             for (int c = 0; c < 8; c++) {
                 System.out.print(matrix[i][c] + "\t");
             }
             System.out.println();
         }
-	}
-        
-        static boolean isSafe(int board[][], int row, int col)
-    {
-        int i, j;
-        for (i = 0; i < 8; i++)
-            if (board[row][i] == 1 && i!=col )
-                return false;
-
-        for (i = 0; i < 8; i++)
-            if (board[i][col] == 1 && i!=row )
-                return false;
-        
-        for (i = row-1, j = col-1; i >= 0 && j >= 0; i--, j--)
-            if (board[i][j] == 1)
-                return false;
-            
-        for (i = row+1, j = col-1; j >= 0 && i < 8; i++, j--)
-            if (board[i][j] == 1)
-                return false;
-        
-        for (i = row+1, j = col+1; i < 8 && j < 8 ; i++, j++)
-            if (board[i][j] == 1)
-                return false;
-            
-        for (i = row-1, j = col+1; j < 8 && i >= 0; i--, j++)
-            if (board[i][j] == 1)
-                return false;
-        
-        return true;
     }
-        private static void traverse(int first[][], int row, int column){
-            int counter = 0;
-            for (int i = 0; i < row; i++) {
-                    for(int k=0; k<column; k++){
-                        if (first[i][k] == 1) {
-                            System.out.println(isSafe(first,i,k));
-                            if(isSafe(first,i,k)){
-                                counter++;
-                             // System.out.println(counter);
-                            }
-                        }
-                    }
+
+
+
+    private static Vector<Pair<Integer, Integer>> GetQueens(int[][] board) {
+        Vector<Pair<Integer, Integer>> Queens = new Vector<>();
+
+        for (int row = 0; row < 8; row++) {
+            for (int column = 0; column < 8; column++) {
+                if (board[row][column] == 1) {
+                    Queens.add(new Pair<>(row,column));
                 }
-            if(counter ==8){
-                System.out.println("True");
             }
-            else{
-               System.out.println("False"); 
-            }    
         }
-
+        return Queens;
     }
+
+}
     
 

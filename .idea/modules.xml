@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Eight queen puzzle/Eight queen puzzle.iml" filepath="$PROJECT_DIR$/Eight queen puzzle/Eight queen puzzle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MySolution/MySolution.iml" filepath="$PROJECT_DIR$/MySolution/MySolution.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/N-queen-.iml" filepath="$PROJECT_DIR$/.idea/N-queen-.iml" />
+    </modules>
+  </component>
+</project>
