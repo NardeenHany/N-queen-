@@ -45,8 +45,7 @@ public class MySolution  {
         Checker check = new Checker(queensThreads);
       service.execute(check);
         service.shutdown();
-//        ScheduledExecutorService ScheduledService = Executors.newScheduledThreadPool(coreCount);
-//        ScheduledService.schedule(check,2,SECONDS);
+
 
 
 
