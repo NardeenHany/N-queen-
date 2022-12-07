@@ -1,13 +1,13 @@
 
 
 package mysolution;
+
 import javafx.util.Pair;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class MySolution  {
@@ -29,7 +29,7 @@ public class MySolution  {
         CountDownLatch latch = new CountDownLatch(8);
         //get Queens locations
         Vector<Pair<Integer, Integer>>  queens = GetQueens(board);
-        Queen queensThreads[] = new Queen[8];
+        Queen[] queensThreads = new Queen[8];
         for (int i = 0; i < 8; i++) {
             queensThreads[i] = new Queen(board,queens.get(i).getKey(),queens.get(i).getValue(),latch);
            service.execute(queensThreads[i]);
@@ -40,7 +40,7 @@ public class MySolution  {
         latch.await();
 
         Checker check = new Checker(queensThreads);
-        
+
         service.execute(check);
 
         service.shutdown();
