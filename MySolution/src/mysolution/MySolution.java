@@ -4,6 +4,7 @@ package mysolution;
 
 import javafx.util.Pair;
 
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -13,35 +14,51 @@ import java.util.concurrent.Executors;
 public class MySolution  {
 
     public static void main(String[] args) throws InterruptedException {
-        int[][] board = {{0, 0, 0, 1, 0, 0, 0, 0},
+        int[][] board = {
+                {0, 0, 0, 1, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 1, 0},
                 {0, 0, 1, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 1},
                 {0, 1, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 1, 0, 0, 0},
                 {1, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 1, 0, 0}};
+                {0, 0, 0, 0, 0, 1, 0, 0}
+                };
 
 
 
         int coreCount = Runtime.getRuntime().availableProcessors();
+
+        // just run first 8 threads that contains each queens location checker
         ExecutorService service = Executors.newFixedThreadPool(8);
         CountDownLatch latch = new CountDownLatch(8);
+
+
         //get Queens locations
+
         Vector<Pair<Integer, Integer>>  queens = GetQueens(board);
-        Queen[] queensThreads = new Queen[8];
+
+        ArrayList<Thread> queensThreads = new ArrayList<>();
+        Queen[] qt = new Queen[8];
+        //make for each queen a thread
         for (int i = 0; i < 8; i++) {
-            queensThreads[i] = new Queen(board,queens.get(i).getKey(),queens.get(i).getValue(),latch);
-           service.execute(queensThreads[i]);
+            Queen q = new Queen(board,queens.get(i).getKey(),queens.get(i).getValue(),latch);
+            qt[i] = q;
+            Thread t = new Thread(q);
+//          queensThreads[i] = new Queen(board,queens.get(i).getKey(),queens.get(i).getValue(),latch);
+            queensThreads.add(t);
+        }
+        for (Thread t : queensThreads){
+            service.submit(t);
         }
 
 
+//        latch.await();
+        
+        Checker check = new Checker(qt);
 
-        latch.await();
-
-        Checker check = new Checker(queensThreads);
-
-        service.execute(check);
+        Thread t = new Thread(check);
+        service.submit(t);
 
         service.shutdown();
 

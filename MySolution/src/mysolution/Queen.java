@@ -46,6 +46,7 @@ public class Queen implements Runnable {
         QueenCol = queenCol;
     }
 
+//  Checks that is the queen is safely placed, as there is no other queens in the same row and column , diagonal
     boolean isSafe() {
         int i, j;
         
@@ -75,7 +76,7 @@ public class Queen implements Runnable {
                 return false;
 
         isSafeQueen = true;
-        countDownLatch.countDown();
+//        countDownLatch.countDown();
         return true;
     }
 
