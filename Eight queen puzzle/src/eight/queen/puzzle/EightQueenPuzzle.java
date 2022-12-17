@@ -73,7 +73,7 @@ public class EightQueenPuzzle {
         }
 
         printSolution(board);
-       
+        Table table = new Table(board);
     }
 }
 

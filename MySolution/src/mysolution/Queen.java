@@ -7,15 +7,13 @@ public class Queen implements Runnable {
     int [][] Board;
     int BoardSize = 8;
     int QueenRow, QueenCol;
-    private CountDownLatch countDownLatch;
     boolean isSafeQueen = false;
 
 
-    public Queen(int[][]board, int row, int col ,CountDownLatch countDownLatch ) {
+    public Queen(int[][]board, int row, int col ) {
         Board = board;
         QueenRow = row;
         QueenCol = col;
-        this.countDownLatch = countDownLatch;
     }
 
     public int[][] getBoard() {

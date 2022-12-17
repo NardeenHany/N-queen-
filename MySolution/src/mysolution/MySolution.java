@@ -6,7 +6,6 @@ import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Vector;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -30,33 +29,32 @@ public class MySolution  {
         int coreCount = Runtime.getRuntime().availableProcessors();
 
         // just run first 8 threads that contains each queens location checker
-        ExecutorService service = Executors.newFixedThreadPool(8);
-        CountDownLatch latch = new CountDownLatch(8);
+        final int noOfQueens = 8;
+        ExecutorService service = Executors.newFixedThreadPool(noOfQueens);
 
 
         //get Queens locations
 
-        Vector<Pair<Integer, Integer>>  queens = GetQueens(board);
+        Vector<Pair<Integer, Integer>>  queens = GetQueensLocations(board);
 
         ArrayList<Thread> queensThreads = new ArrayList<>();
         Queen[] qt = new Queen[8];
+
         //make for each queen a thread
-        for (int i = 0; i < 8; i++) {
-            Queen q = new Queen(board,queens.get(i).getKey(),queens.get(i).getValue(),latch);
+        for (int i = 0; i < noOfQueens; i++) {
+            Queen q = new Queen(board,queens.get(i).getKey(),queens.get(i).getValue());
             qt[i] = q;
             Thread t = new Thread(q);
-//          queensThreads[i] = new Queen(board,queens.get(i).getKey(),queens.get(i).getValue(),latch);
             queensThreads.add(t);
         }
+
+//        submitting all threads
         for (Thread t : queensThreads){
             service.submit(t);
         }
 
-
-//        latch.await();
-        
+//        create Checker( checks that all queens are in correct positions)
         Checker check = new Checker(qt);
-
         Thread t = new Thread(check);
         service.submit(t);
 
@@ -75,7 +73,7 @@ public class MySolution  {
 
 
 
-    private static Vector<Pair<Integer, Integer>> GetQueens(int[][] board) {
+    private static Vector<Pair<Integer, Integer>> GetQueensLocations(int[][] board) {
         Vector<Pair<Integer, Integer>> Queens = new Vector<>();
 
         for (int row = 0; row < 8; row++) {
