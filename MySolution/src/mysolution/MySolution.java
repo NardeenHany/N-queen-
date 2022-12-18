@@ -24,8 +24,6 @@ public class MySolution  {
                 {0, 0, 0, 0, 0, 1, 0, 0}
                 };
 
-
-
         int coreCount = Runtime.getRuntime().availableProcessors();
 
         // just run first 8 threads that contains each queens location checker

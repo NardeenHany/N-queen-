@@ -88,7 +88,7 @@ public class Table {
 
         public void assignTilePieceIcon ( boolean isValid){
             this.removeAll();
-                String pieceIconPath = "E:\\Study\\4th\\PP\\Project\\N-queen-\\picture\\bq.png";
+                String pieceIconPath = "E:\\Study\\4th\\PP\\Project\\N-queen-\\picture\\c1.png";
                 if(isValid){
                 try {
                     final BufferedImage image = ImageIO.read(new File(pieceIconPath));
