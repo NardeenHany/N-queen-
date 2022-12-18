@@ -79,26 +79,26 @@ public class EightQueenPuzzle {
         return false;
     }
 
-    public static void main(String[] args)
-    {
-        int[][] board = { { 0, 0, 0, 0, 0, 0, 0, 0 },
-                          { 0, 0, 0, 0, 0, 0, 0, 0 },
-                          { 0, 0, 0, 0, 0, 0, 0, 0 },
-                          { 0, 0, 0, 0, 0, 0, 0, 0 }, 
-                          { 0, 0, 0, 0, 0, 0, 0, 0 },
-                          { 0, 0, 0, 0, 0, 0, 0, 0 },
-                          { 0, 0, 0, 0, 0, 0, 0, 0 },
-                          { 0, 0, 0, 0, 0, 0, 0, 0 }};
-
-        ArrayList<int[][]> boards = new ArrayList<>();
-        solveNQueen(board, 0,boards);
-//        printSolution(boards.get(15));
-        int boardNumber = (int)(Math.random() * (boards.size() - 1 + 1) + 1);
-        printSolution(boards.get(boardNumber));
-
-
-//        Table table = new Table(board);
-    }
+//    public static void main(String[] args)
+//    {
+//        int[][] board = { { 0, 0, 0, 0, 0, 0, 0, 0 },
+//                          { 0, 0, 0, 0, 0, 0, 0, 0 },
+//                          { 0, 0, 0, 0, 0, 0, 0, 0 },
+//                          { 0, 0, 0, 0, 0, 0, 0, 0 },
+//                          { 0, 0, 0, 0, 0, 0, 0, 0 },
+//                          { 0, 0, 0, 0, 0, 0, 0, 0 },
+//                          { 0, 0, 0, 0, 0, 0, 0, 0 },
+//                          { 0, 0, 0, 0, 0, 0, 0, 0 }};
+//
+//        ArrayList<int[][]> boards = new ArrayList<>();
+//        solveNQueen(board, 0,boards);
+////        printSolution(boards.get(15));
+//        int boardNumber = (int)(Math.random() * (boards.size() - 1 + 1) + 1);
+//        printSolution(boards.get(boardNumber));
+//
+//
+////        Table table = new Table(board);
+//    }
 
 
 }
