@@ -7,17 +7,11 @@ public class Checker implements Runnable{
     Queen[] queensThreads;
     int CorrectQueens = 0;
 
-    private CountDownLatch countDownLatch;
-
-    public boolean isSolutionValid() {
-        return solutionStatus;
-    }
+    private final CountDownLatch countDownLatch;
 
     boolean solutionStatus = false;
 
-    public int getCorrectQueens() {
-        return CorrectQueens;
-    }
+
 
     public Checker(Queen[] queensThreads,CountDownLatch countDownLatch) {
         this.queensThreads = queensThreads;

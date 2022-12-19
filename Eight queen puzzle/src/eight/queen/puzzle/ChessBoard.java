@@ -13,6 +13,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static java.lang.Thread.sleep;
+
 public class ChessBoard {
 
 
@@ -26,6 +28,7 @@ public class ChessBoard {
         initializeGui();
     }
     Icon icon = new ImageIcon("E:\\Study\\4th\\PP\\Project\\N-queen-\\picture\\c1.png");
+    Icon greenIcon = new ImageIcon("E:\\Study\\4th\\PP\\Project\\N-queen-\\picture\\c1g.png");
 
     public final void initializeGui() {
 
@@ -80,10 +83,15 @@ public class ChessBoard {
 
             ArrayList<int[][]> boards = new ArrayList<>();
             EightQueenPuzzle.solveNQueen(board,0,boards);
+
+            //Generate a Random number from 0 to (No. of solutions) to display only one solution at the board
             int boardNumber = (int)(Math.random() * (boards.size() - 1 + 1) + 1);
+
+
+            //Set Queens Positions on the board
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
-                    if(boards.get(boardNumber -1)[i][j] == 1){
+                    if(boards.get(boardNumber - 1)[i][j] == 1){
                         chessBoardSquares[i][j].setIcon(icon);
                     }
                     else{
@@ -93,7 +101,7 @@ public class ChessBoard {
             }
         });
 
-
+        //Takes User's solution on the board and check if the solution is valid or not
         submitButton.addActionListener(e -> {
             final int noOfQueens = 8;
             int [][]board = GetBoardValues();
@@ -102,21 +110,23 @@ public class ChessBoard {
 
             int coreCount = Runtime.getRuntime().availableProcessors();
 
-            // Just run first 8 threads that contain each queens location checker
+            // Just run first 8 threads that contain each queen's location
             ExecutorService service = Executors.newFixedThreadPool(8);
 
-            CountDownLatch latch = new CountDownLatch(8);
+            //Set the latch counter with Queens number
+            CountDownLatch latch = new CountDownLatch(noOfQueens);
 
-            Vector<Pair<Integer, Integer>> queens = GetQueensLocations(board);
+            Vector<Pair<Integer, Integer>> queensLoactions = GetQueensLocations(board);
 
-            if(queens.size() != 8){
+            if(queensLoactions.size() != 8){
                 JOptionPane.showMessageDialog(null, "Please enter 8 queens only, not more or less ", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             //make for each queen safetyChecker a thread
             for (int i = 0; i < noOfQueens; i++) {
-                Queen q = new Queen(board,queens.get(i).getKey(),queens.get(i).getValue(),latch);
+                Queen q = new Queen(board,queensLoactions.get(i).getKey(),queensLoactions.get(i).getValue(),latch);
+                q.setQueenButton(chessBoardSquares[queensLoactions.get(i).getValue()][queensLoactions.get(i).getKey()]);
                 qt[i] = q;
                 Thread t = new Thread(q);
                 queensThreads.add(t);
@@ -133,10 +143,12 @@ public class ChessBoard {
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);
             }
-//              this latch is declared just to make the popup message to wait checker thread to finish
+
+
+//          This latch is declared just to make the popup message to wait checker thread to finish
             CountDownLatch latch2 = new CountDownLatch(1);
 
-//              create Checker( checks that all queens are in correct positions)
+//          Create Checker( checks that all queens are in correct positions)
             Checker check = new Checker(qt,latch2);
             Thread t = new Thread(check);
 
@@ -152,7 +164,28 @@ public class ChessBoard {
 
             System.out.println("Answer:"+check.CorrectQueens);
 
-            PrintAnswerValidation(check.CorrectQueens);
+
+            Thread shower = new Thread(){
+                @Override
+                public void run() {
+                    try {
+                        sleep(3000);
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    if(check.CorrectQueens == 8){
+                        JOptionPane.showMessageDialog(null, "Your Answer is Correct", "Nice", JOptionPane.PLAIN_MESSAGE);
+                        return;
+                    }
+                    JOptionPane.showMessageDialog(null, "Your Answer is Wrong", "Error", JOptionPane.PLAIN_MESSAGE);
+                }
+            };
+            shower.start();
+//            try {
+//                PrintAnswerValidation(check.CorrectQueens);
+//            } catch (InterruptedException ex) {
+//                throw new RuntimeException(ex);
+//            }
 
             service.shutdown();
         });
@@ -165,8 +198,8 @@ public class ChessBoard {
 
         // create the chess board squares
         Insets buttonMargin = new Insets(0,0,0,0);
-        for (int ii = 0; ii < chessBoardSquares.length; ii++) {
-            for (int jj = 0; jj < chessBoardSquares[ii].length; jj++) {
+        for (int i = 0; i < chessBoardSquares.length; i++) {
+            for (int j = 0; j < chessBoardSquares[i].length; j++) {
                 JButton b = new JButton();
                 b.setMargin(buttonMargin);
                 // our chess pieces are 64x64 px in size, so we'll
@@ -174,14 +207,14 @@ public class ChessBoard {
                 ImageIcon icon = new ImageIcon(
                         new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
                 b.setIcon(icon);
-                if ((jj % 2 == 1 && ii % 2 == 1)
+                if ((j % 2 == 1 && i % 2 == 1)
                         //) {
-                        || (jj % 2 == 0 && ii % 2 == 0)) {
+                        || (j % 2 == 0 && i % 2 == 0)) {
                     b.setBackground(Color.WHITE);
                 } else {
                     b.setBackground(Color.BLACK);
                 }
-                chessBoardSquares[jj][ii] = b;
+                chessBoardSquares[j][i] = b;
             }
         }
 
@@ -286,7 +319,7 @@ public class ChessBoard {
         int [][]board = new int[8][8];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if(chessBoardSquares[i][j].getIcon() == icon){
+                if(chessBoardSquares[i][j].getIcon() != null){
                     board[j][i] = 1;
                 }
                 else{
@@ -297,7 +330,8 @@ public class ChessBoard {
         return board;
     }
 
-    public void PrintAnswerValidation(int n){
+    public void PrintAnswerValidation(int n) throws InterruptedException {
+        sleep(3000);
         if(n == 8){
             JOptionPane.showMessageDialog(null, "Your Answer is Correct", "Nice", JOptionPane.PLAIN_MESSAGE);
             return;

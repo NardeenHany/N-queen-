@@ -8,7 +8,6 @@ import static javafx.collections.FXCollections.copy;
 
 public class EightQueenPuzzle {
     static final int N = 8;
-    static  int[][] boardd ;
    // print the final solution matrix 
     static void printSolution(int[][] board)
     {
@@ -69,8 +68,6 @@ public class EightQueenPuzzle {
             if (isSafe(board, i, col)) {
                 board[i][col] = 1;
 
-//                if (solveNQueen(board, col + 1))
-//                    return true;
                 solveNQueen(board, col + 1,boards);
                 //backtrack if the above condition is false
                 board[i][col] = 0;
@@ -78,28 +75,6 @@ public class EightQueenPuzzle {
         }
         return false;
     }
-
-//    public static void main(String[] args)
-//    {
-//        int[][] board = { { 0, 0, 0, 0, 0, 0, 0, 0 },
-//                          { 0, 0, 0, 0, 0, 0, 0, 0 },
-//                          { 0, 0, 0, 0, 0, 0, 0, 0 },
-//                          { 0, 0, 0, 0, 0, 0, 0, 0 },
-//                          { 0, 0, 0, 0, 0, 0, 0, 0 },
-//                          { 0, 0, 0, 0, 0, 0, 0, 0 },
-//                          { 0, 0, 0, 0, 0, 0, 0, 0 },
-//                          { 0, 0, 0, 0, 0, 0, 0, 0 }};
-//
-//        ArrayList<int[][]> boards = new ArrayList<>();
-//        solveNQueen(board, 0,boards);
-////        printSolution(boards.get(15));
-//        int boardNumber = (int)(Math.random() * (boards.size() - 1 + 1) + 1);
-//        printSolution(boards.get(boardNumber));
-//
-//
-////        Table table = new Table(board);
-//    }
-
 
 }
 
